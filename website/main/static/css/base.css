@@ -1,0 +1,65 @@
+body {
+    background-color: black;
+    color: rgb(90, 211, 211);
+    font-family: "Poppins", "sans-serif";
+    height: 100%;
+}
+
+
+#userName {
+    position: absolute;
+    color: #fff;
+    bottom: 25px;
+    font-size: 19px;
+    width: 80%;
+}
+
+.alert {
+    top: 0;
+    background-color: rgb(111, 61, 158);
+    width: 50%;
+    border-color: white;
+    color: white;
+    margin-right: 25%;
+    margin-left: 30%;
+    margin-top: 1%;
+}
+
+#sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 12rem;
+    height: 100%;
+    z-index: 1;
+    background-color: rgb(111, 61, 158);
+    overflow-x: auto;
+    padding-top: 20px;
+    margin: 0;
+}
+
+#sidebar a:hover {
+    background-color: white;
+    color: rgb(90, 211, 211);
+    font-weight: bold;
+    transition: ease 200ms;
+    scale: 1.1;
+}
+
+.messages li {
+    margin-left:5%;
+    align-items: center;
+    display: inline-block;
+    text-align: center;
+    display:flex;
+    justify-content: center;
+    font-size: 20px;
+}
+
+.messages li.success {
+    color: white;
+}
+
+.messages li.error, .messages li.warning {
+    color: rgb(255, 255, 255);
+}
