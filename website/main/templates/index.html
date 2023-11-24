@@ -6,7 +6,7 @@
     <section class="wrapper" style="color: black; margin-left: 20%; margin-right: 30%; margin-top: 2%;">
         <div class="table-wrapper">
             <h1>HomePage - {{ reservations_count }} Reserva(s)</h1>
-            <table class="table" style="padding: 10px; border: 3px solid black; border-radius: 5%; border-style: solid;">
+            <table class="table" style="padding: 10px; border: 3px solid black; border-radius: 5%; border-style: solid; width: 40%; height: 40%;">
                 <thead class="table-head" style="background-color: #18a689; border: 3px solid black;">
                     <tr>
                         <th>ID</th>
@@ -65,12 +65,12 @@
         </div>
     </section>
 {% else %}
-    <div style="display: inline-block; justify-content: center; align-items: center; padding: 20px 30px; margin-top: 15%; margin-left: 40%; border-radius: 9px; border: 2px solid rgb(55, 164, 149);">
+    <div style="display: inline-block; padding: 20px 30px; margin-top: 15%; margin-left: 370px; margin-right: 200px; border-radius: 9px; border: 2px solid black; width: 50%; height: 50%;">
         <form method="POST" action="{% url 'index' %}">
             {% csrf_token %}
-            <br><h3><i class="fa fa-simplybuilt" aria-hidden="true"></i> Logar no sistema</h3><br>
-            <div class="mb-3"><input style="width: 100%; padding: 8px; margin-bottom: 15px; box-sizing: border-box;" type="text" name="username", placeholder="User" required></div><br>
-            <div class="mb-3"><input style="width: 100%; padding: 8px; margin-bottom: 15px; box-sizing: border-box;" type="password" name="password" placeholder="Password" required></div><br>
+            <br><h3><i class="fa fa-simplybuilt" aria-hidden="true"></i> Informar credenciais para login: </h3><br>
+            <div class="mb-3"><input style="width: 100%; padding: 8px; margin-bottom: 15px; box-sizing: border-box;" type="text" name="username", placeholder="Usuário" required></div><br>
+            <div class="mb-3"><input style="width: 100%; padding: 8px; margin-bottom: 15px; box-sizing: border-box;" type="password" name="password" placeholder="Senha" required></div><br>
             <button type="submit">Entrar</button>
         </form>
     </div>

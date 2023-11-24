@@ -23,9 +23,8 @@
             <a class="nav-link" href="{% url 'show_users' %}"><span><i class="fa fa-users" aria-hidden="true" style="margin-right: 5%;"></i>Usuários</span></a><br>
             <a class="nav-link" href="{% url 'logout_user' %}"><span><i class="fa fa-power-off" style="margin-right: 5%;"></i> Logout</span></a><br><br>
         {% else %}
-            <span><i class="fa fa-lock" aria-hidden="true"></i>Indisponível</span><br><br>
-            <a class="nav-link" href="{% url 'register' %}"><span><i class="fa fa-user-circle-o" aria-hidden="true"></i>Criar Usuário</span></a><br>
-            <a class="nav-link" href="{% url 'index' %}"><span><i class="fa fa-sign-in" aria-hidden="true"></i>Realizar Login</span></a>
+            <a class="nav-link" href="{% url 'register' %}"><span><i class="fa fa-user-circle-o" aria-hidden="true" style="margin-right: 5%;"></i>Criar Usuário</span></a><br>
+            <a class="nav-link" href="{% url 'index' %}"><span><i class="fa fa-sign-in" aria-hidden="true" style="margin-right: 5%;"></i>Realizar Login</span></a>
         {% endif %}
         {% if user.is_authenticated %}
             <div id="userName"><span><i class="fa fa-user-secret" style="margin-right: 5px;"></i> {{ user.username }}</span></div>
