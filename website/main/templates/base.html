@@ -1,7 +1,7 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head> 
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,92 +9,35 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins&display=swap">
     <link rel="stylesheet" href="{% static 'base.css' %}">
+    <script src="{% static 'base.js' %}"></script>
     <title> Book Managment System </title>
-    
 </head>
-
 <body>
     <div id="sidebar">
+        <img src="{% static 'logo.png' %}" alt="Description of the image">
         {% if user.is_authenticated %}
-            <span>
-                Disponível
-                <i class="fa fa-toggle-on" aria-hidden="true"></i>
-            </span>
-            <br>
-            <br>
-            <a class="nav-link" href="{% url 'index' %}"> 
-                <span>
-                    <i class="fa fa-home" aria-hidden="true" style="margin-right: 5%;"></i> 
-                    HomePage
-                </span> 
-            </a>
-            <br>
-            <a class="nav-link" href="{% url 'add_books' %}">
-                <span style="margin-left: 10%;  font-size: large;">
-                    <i class="fa fa-book" aria-hidden="true" style="margin-right: 5%;"></i>
-                    Registrar livro
-                </span>
-            </a>
-            <br>
-            <a class="nav-link" href="{% url 'register' %}">
-                <span>
-                    <i class="fa fa-user-circle-o" aria-hidden="true" style="margin-right: 5%;"></i>
-                    Criar usuário
-                </span>
-            </a>
-            <br>
-            <a class="nav-link" href="{% url 'show_my_reservasions' %}">
-                <span>
-                    <i class="fa fa-archive" aria-hidden="true"  style="margin-right: 5%;"></i>
-                    Reservas
-                </span>
-            </a>
-            <br>
-            <a class="nav-link" href="{% url 'logout_user' %}">
-                <span>
-                    <i class="fa fa-power-off" style="margin-right: 5%;"></i> 
-                    Logout
-                </span>
-            </a>
-            <br>
-            <br>
+            <a class="nav-link" href="{% url 'index' %}"><span><i class="fa fa-home" aria-hidden="true" style="margin-right: 5%;"></i>Reservas</span></a><br>
+            <a class="nav-link" href="{% url 'add_books' %}"><span style="margin-left: 10%;  font-size: large;"><i class="fa fa-book" aria-hidden="true" style="margin-right: 5%;"></i>Registrar livro</span></a><br>
+            <a class="nav-link" href="{% url 'show_books' %}"><span><i class="fa fa-database" aria-hidden="true" style="margin-right: 5%;"></i>Mostrar Livros</span></a><br>    
+            <a class="nav-link" href="{% url 'register' %}"><span><i class="fa fa-user-circle-o" aria-hidden="true" style="margin-right: 5%;"></i>Criar usuário</span></a><br>
+            <a class="nav-link" href="{% url 'show_users' %}"><span><i class="fa fa-users" aria-hidden="true" style="margin-right: 5%;"></i>Usuários</span></a><br>
+            <a class="nav-link" href="{% url 'logout_user' %}"><span><i class="fa fa-power-off" style="margin-right: 5%;"></i> Logout</span></a><br><br>
         {% else %}
-            <span>
-                Indisponível
-                <i class="fa fa-lock" aria-hidden="true" style="color: rgb(90, 211, 211);"></i>
-            </span>
-            <br>
-            <br>
-            <a class="nav-link" href="{% url 'register' %}">
-                <span>
-                    Criar Usuário
-                    <i class="fa fa-user-circle-o" aria-hidden="true" style="color: rgb(90, 211, 211);"></i>
-                </span>
-            </a>
-            <br>
-            <a class="nav-link" href="{% url 'index' %}">
-                <span>
-                    Realizar Login
-                    <i class="fa fa-sign-in" aria-hidden="true" style="color: rgb(90, 211, 211);"></i>
-                </span>
-            </a>
+            <span><i class="fa fa-lock" aria-hidden="true"></i>Indisponível</span><br><br>
+            <a class="nav-link" href="{% url 'register' %}"><span><i class="fa fa-user-circle-o" aria-hidden="true"></i>Criar Usuário</span></a><br>
+            <a class="nav-link" href="{% url 'index' %}"><span><i class="fa fa-sign-in" aria-hidden="true"></i>Realizar Login</span></a>
         {% endif %}
         {% if user.is_authenticated %}
-            <div id="userName">
-                <span>
-                    <i class="fa fa-user-secret" style="margin-right: 5px;"></i> {{ user.username }}
-                </span>
-            </div>
+            <div id="userName"><span><i class="fa fa-user-secret" style="margin-right: 5px;"></i> {{ user.username }}</span></div>
         {% endif %}
     </div>
-
     {% if messages %}
-        <div class="alert" role="alert" style="background-color: rgb(111, 61, 158);">
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        <div class="alert" role="alert" >
+            <button type="button" class="btn-close" aria-label="Close"></button>
             <ul class="messages">
-                {% for message in messages %}
-                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>   
-                {% endfor %}
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>   
+            {% endfor %}
             </ul>
         </div>
     {% endif %}

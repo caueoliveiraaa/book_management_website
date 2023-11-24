@@ -9,8 +9,8 @@ class CustomUserCreationForm(UserCreationForm):
     bill = forms.FloatField()
     is_superuser = forms.BooleanField(
         required=False,
-        label="Is Admin",
-        help_text="Admin User",
+        label="É admin",
+        help_text="Usuário admin",
     )
 
     class Meta:
@@ -34,7 +34,7 @@ class BookCreationForm(forms.ModelForm):
         required=True,
         input_formats=['%Y-%m-%d', '%m/%d/%Y', '%m/%d/%y'],
         widget=DateInput(attrs={'type': 'date'}),
-        help_text='Enter the date in DD-MM-YYYY format or pick from the calendar.',
+        help_text='Formato DD-MM-YYYY.',
     )
 
     class Meta:

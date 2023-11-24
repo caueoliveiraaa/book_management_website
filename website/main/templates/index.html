@@ -1,64 +1,78 @@
 {% extends 'base.html' %}
 {% load static %}
 {% csrf_token %}
-
 {% block content %}
 {% if user.is_authenticated %}
-<div style="margin-top: 15%; margin-left: 40%;">
-    <a href="{% url 'show_books' %}" style="font-weight: bold;
-                                        padding: 10px 20px;
-                                        border: 2px solid #00D6C4;
-                                        border-radius: 9px; 
-                                        margin-right: 2%;
-                                    ">
-        <i class="fa fa-database" aria-hidden="true"></i>
-        Mostrar livros registrados
-    </a>    
-    <a href="{% url 'show_users' %}" style="font-weight: bold;
-                                        padding: 10px 20px;
-                                        border: 2px solid #00D6C4;
-                                        border-radius: 9px; 
-                                        margin-right: 2%;
-                                    ">
-        <i class="fa fa-id-card" aria-hidden="true"></i>
-        Mostrar usuários registrados
-    </a>
-</div>
+    <section class="wrapper" style="color: black; margin-left: 20%; margin-right: 30%; margin-top: 2%;">
+        <div class="table-wrapper">
+            <h1>HomePage - {{ reservations_count }} Reserva(s)</h1>
+            <table class="table" style="padding: 10px; border: 3px solid black; border-radius: 5%; border-style: solid;">
+                <thead class="table-head" style="background-color: #18a689; border: 3px solid black;">
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>Autor</th> 
+                        <th>Sinopse</th>
+                        <th>Data de Lançamento</th>
+                        <th>Data da Reserva</th>
+                        <th>Status</th>
+                        <th>Prazo de Entrega</th>
+                        <th>Retirar Livro</th>
+                        <th>Retornar Livro</th>
+                        <th>Cancelar Reserva</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for reservation in user_reservations %}
+                    <tr>
+                        <td>{{ reservation.book.id }}</td>
+                        <td>{{ reservation.book.name }}</td>
+                        <td>{{ reservation.book.author }}</td>
+                        <td>{{ reservation.book.synopsis }}</td>
+                        <td>{{ reservation.book.data_lancamento }}</td>
+                        <td>{{ reservation.reservation_date }}</td>
+                        <td>{{ reservation.book.status }}</td>
+                        <td>{{ reservation.deadline_date }}</td>
+                        <td><a href="{% url 'take_book' reservation.book.id reservation.id %}" style="margin-left: 20px; text-decoration: none;"> 
+                                <i class="fa fa-hand-rock-o" aria-hidden="true" style="font-size: 30px;"></i>
+                            </a>
+                        </td>
+                        <td>    
+                            <a href="{% url 'return_book' reservation.book.id reservation.id %}" style="margin-left: 20px; text-decoration: none;">
+                                <i class="fa fa-university" aria-hidden="true" style="font-size: 30px;"></i>
+                            </a>
+                        </td>
+                        <td>    
+                            <a href="{% url 'cancel_reservation' reservation.id %}" style="margin-left: 20px; text-decoration: none;" onclick="return confirm('Deseja realmente cancelar a reserva?')"> 
+                                <i class="fa fa-window-close-o" aria-hidden="true" style="font-size: 30px;"></i>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <div class="pagination">
+                <span class="step-links">
+                    <span class="current" style="padding-right: 10px;">Página {{ books.number }} de {{ books.paginator.num_pages }}.</span>
+                    {% if books.has_previous %}
+                        <a href="?page=1">&laquo; Primeiro</a> <a href="?page={{ books.previous_page_number }}">Anterior</a>
+                    {% endif %}
+                    {% if books.has_next %}
+                        <a href="?page={{ books.next_page_number }}">Próximo</a> <a href="?page={{ books.paginator.num_pages }}">Último &raquo;</a>
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+    </section>
 {% else %}
-<div style="display: inline-block;
-    justify-content: center;
-    align-items: center;
-    padding: 20px 30px;
-    margin-top: 15%;
-    margin-left: 40%;
-    border-radius: 9px;
-    border: 2px solid #00D6C4;">
-    <form method="POST" action="{% url 'index' %}">
-        {% csrf_token %}
-        <br>
-        <h3>
-            <i class="fasolid fa-robot"></i>
-            Logar no sistema
-        </h3>
-        <br>
-        <div class="mb-3">
-            <input style="width: 100%;
-                padding: 8px;
-                margin-bottom: 15px;
-                box-sizing: border-box;"
-            type="text" name="username", placeholder="User" required>
-        </div>
-        <br>
-        <div class="mb-3">
-            <input style="width: 100%;
-            padding: 8px;
-            margin-bottom: 15px;
-            box-sizing: border-box;"
-            type="password" name="password" placeholder="Password" required>
-        </div>
-        <br>
-        <button type="submit" class="btn btn-info">Entrar</button>
-    </form>
-</div>
+    <div style="display: inline-block; justify-content: center; align-items: center; padding: 20px 30px; margin-top: 15%; margin-left: 40%; border-radius: 9px; border: 2px solid rgb(55, 164, 149);">
+        <form method="POST" action="{% url 'index' %}">
+            {% csrf_token %}
+            <br><h3><i class="fa fa-simplybuilt" aria-hidden="true"></i> Logar no sistema</h3><br>
+            <div class="mb-3"><input style="width: 100%; padding: 8px; margin-bottom: 15px; box-sizing: border-box;" type="text" name="username", placeholder="User" required></div><br>
+            <div class="mb-3"><input style="width: 100%; padding: 8px; margin-bottom: 15px; box-sizing: border-box;" type="password" name="password" placeholder="Password" required></div><br>
+            <button type="submit">Entrar</button>
+        </form>
+    </div>
 {% endif %}
 {% endblock %}
