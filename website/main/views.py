@@ -1,12 +1,34 @@
-from django.contrib.auth import authenticate, login, logout
-from django.shortcuts import render, redirect, get_object_or_404
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.db import connection
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
-from .forms import CustomUserCreationForm, BookCreationForm
 from datetime import datetime, timedelta
 from .models import *
+
+from .forms import (
+    CustomUserCreationForm,
+    BookCreationForm
+)
+
+from django.core.paginator import (
+    Paginator,
+    EmptyPage,
+    PageNotAnInteger
+)
+
+from django.contrib.auth import (
+    authenticate,
+    login,
+    logout
+)
+
+from django.shortcuts import (
+    render,
+    redirect,
+    get_object_or_404
+)
 
 
 @login_required
@@ -32,7 +54,9 @@ def show_users(request):
 @login_required
 def del_users(request, user_id):
     user = get_object_or_404(User, id=user_id)
+    name = user.username
     user.delete()
+    messages.success(request, f'Usuário \'{name}\' excluído com sucesso.')
     return redirect('show_users')
 
 
@@ -62,7 +86,6 @@ def logout_user(request):
 @login_required
 def reserve_book(request, book_id):
     book = get_object_or_404(Books, id=book_id)
-    
     if request.method == 'POST':
         user = request.user  
         reservation_date = request.POST.get('user_date')
@@ -124,12 +147,15 @@ def return_book(request, book_id, reservation_id):
 @login_required
 def cancel_reservation(request, reservation_id):
     reservation = get_object_or_404(Reservation, id=reservation_id)
+    book = reservation.book
+    book.reservas = models.F('reservas') - 1
+    book.save()
     reservation.delete()
     return redirect("index")
 
 
 @login_required
-def show_books(request):    
+def show_books(request):
     books = Books.objects.all()
     books_count = Books.objects.count()
     paginator = Paginator(books, 6)
@@ -149,17 +175,21 @@ def show_books(request):
 
 @login_required
 def add_books(request):
-    if request.method == "POST":
-        form = BookCreationForm(request.POST)
+    if request.user.is_superuser:
+        if request.method == "POST":
+            form = BookCreationForm(request.POST)
 
-        if form.is_valid():
-            form.save()
-            messages.success(request, "Livro cadastrado.")
-            return redirect("index")
+            if form.is_valid():
+                form.save()
+                messages.success(request, "Livro cadastrado.")
+                return redirect("index")
+            else:
+                messages.error(request, "Não foi possível cadastrar livro.")
         else:
-            messages.error(request, "Não foi possível cadastrar livro.")
+            form = BookCreationForm()
     else:
-        form = BookCreationForm()
+        messages.error(request, "Apenas usuários administradores podem cadastrar livros.")
+        return redirect("index")
 
     return render(request, "add_books.html", {"form": form})
 
@@ -167,7 +197,10 @@ def add_books(request):
 @login_required
 def del_books(request, book_id):
     book = get_object_or_404(Books, id=book_id)
+    name = book.name
+    author = book.author
     book.delete()
+    messages.success(request, f'Livro \'{name}\' de \'{author}\' excluído com sucesso.')
     return redirect('show_books')
 
 
@@ -182,11 +215,21 @@ def index(request):
             messages.error(request, "Login falhou, tente outra vez!")
             return render(request, 'index.html', context)
         
+        user.save()
         login(request, user)
 
-    if request.user.is_authenticated:
+    elif request.user.is_authenticated:
+        reservations = Reservation.objects.filter(user=request.user)
+        for reservation in reservations:
+            today = datetime.now().date()
+            if reservation.deadline_date and reservation.deadline_date > today:
+                days_difference = (reservation.deadline_date - today).days
+                for _ in range(days_difference + 1):
+                    request.user.bill += 0.01
+                    request.user.save()
+        
         user_reservations = Reservation.objects.filter(user=request.user)
-        reservations_count = Reservation.objects.count()
+        reservations_count = len(user_reservations)
         paginator = Paginator(user_reservations, 6)
         page = request.GET.get('page')
 

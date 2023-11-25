@@ -6,11 +6,17 @@ from django.forms import DateInput
 
 
 class CustomUserCreationForm(UserCreationForm):
-    bill = forms.FloatField()
     is_superuser = forms.BooleanField(
         required=False,
-        label="É admin",
-        help_text="Usuário admin",
+        label="É usuário administrado "
+    )
+
+    bill = forms.FloatField(
+        label="Multa",
+        initial=0.0,
+        widget=forms.TextInput(
+            attrs={'readonly': 'readonly'}
+        )
     )
 
     class Meta:
