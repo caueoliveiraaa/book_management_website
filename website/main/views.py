@@ -6,6 +6,8 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from datetime import datetime, timedelta
 from .models import *
+from .filters import BookFilter
+
 
 from .forms import (
     CustomUserCreationForm,
@@ -169,6 +171,27 @@ def show_books(request):
         books = paginator.page(paginator.num_pages)
         
     context = {'books_count': books_count, 'books': books}
+
+    return render(request, 'show_books.html', context)
+
+
+@login_required
+def show_books_filter(request):
+    books = Books.objects.all()
+    books_count = Books.objects.count()
+    paginator = Paginator(books, 6)
+    page = request.GET.get('page')
+
+    books_filter = BookFilter(request.GET, queryset=books)
+
+    try:
+        books = paginator.page(page)
+    except PageNotAnInteger:
+        books = paginator.page(1)
+    except EmptyPage:
+        books = paginator.page(paginator.num_pages)
+        
+    context = {'books_count': books_count, 'books': books, 'filter': books_filter}
 
     return render(request, 'show_books.html', context)
 

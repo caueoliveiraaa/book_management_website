@@ -4,6 +4,14 @@
 <section class="wrapper" style="margin-left: 20%; margin-right: 30%; margin-top: 2%;">
 <div class="table-wrapper">
     <h1> {{ books_count }} Livro(s)</h1>
+    
+    
+    <form method="GET">
+    <input type="submit">
+    {{ filter.form.as_p }}
+    </form>
+
+
     <table class="table" style="padding: 10px; border: 3px solid black; border-radius: 5%; border-style: solid;">
         <thead class="table-head" style="background-color: #18a689; border: 3px solid black;">
             <tr style="border: 1px solid black">
