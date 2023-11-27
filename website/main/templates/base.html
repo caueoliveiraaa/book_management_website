@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins&display=swap">
     <link rel="stylesheet" href="{% static 'base.css' %}">
     <script src="{% static 'base.js' %}"></script>
-    <title> Book Managment System </title>
+    <title>Book Managment System</title>
 </head>
 <body>
     <div id="sidebar">
@@ -18,7 +18,7 @@
         {% if user.is_authenticated %}
             <a class="nav-link" href="{% url 'index' %}"><span><i class="fa fa-home" aria-hidden="true" style="margin-right: 5%;"></i>Reservas</span></a><br>
             <a class="nav-link" href="{% url 'add_books' %}"><span style="margin-left: 10%;  font-size: large;"><i class="fa fa-book" aria-hidden="true" style="margin-right: 5%;"></i>Registrar livro</span></a><br>
-            <a class="nav-link" href="{% url 'show_books_filter' %}"><span><i class="fa fa-database" aria-hidden="true" style="margin-right: 5%;"></i>Mostrar Livros</span></a><br>    
+            <a class="nav-link" href="{% url 'show_books_filter' %}"><span><i class="fa fa-database" aria-hidden="true" style="margin-right: 5%;"></i>  Livros</span></a><br>    
             <a class="nav-link" href="{% url 'register' %}"><span><i class="fa fa-user-circle-o" aria-hidden="true" style="margin-right: 5%;"></i>Criar usuário</span></a><br>
             <a class="nav-link" href="{% url 'show_users' %}"><span><i class="fa fa-users" aria-hidden="true" style="margin-right: 5%;"></i>Usuários</span></a><br>
             <a class="nav-link" href="{% url 'logout_user' %}"><span><i class="fa fa-power-off" style="margin-right: 5%;"></i> Logout</span></a><br><br>
@@ -32,7 +32,7 @@
     </div>
     {% if messages %}
         <div class="alert" role="alert" >
-            <button type="button" class="btn-close" aria-label="Close"></button>
+            <button id="closeBtn" type="button" class="btn-close" aria-label="Close"></button>
             <ul class="messages">
             {% for message in messages %}
                 <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>   
@@ -40,7 +40,6 @@
             </ul>
         </div>
     {% endif %}
-
     {% block content %}
     {% endblock %}
 </body>

@@ -12,13 +12,18 @@ class Reservation(models.Model):
         return f'{self.user.username} - {self.reservation_date}'
 
 
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    bill = models.FloatField(default=0.0)
+
+
 class Books(models.Model):
     name = models.CharField(max_length=200, blank=True, null=True)
     author = models.CharField(max_length=200, blank=True, null=True)
     synopsis = models.CharField(blank=True, null=True, max_length=200)
     reservations = models.ManyToManyField(Reservation, blank=True)
     reservas = models.IntegerField(default=0)
-    data_lancamento = models.DateField()
+    data_lancamento = models.DateField(blank=True, null=True)
 
     STATUS_CHOICES = [
         ('Disponível', 'Disponível'),

@@ -6,18 +6,7 @@ from django.forms import DateInput
 
 
 class CustomUserCreationForm(UserCreationForm):
-    is_superuser = forms.BooleanField(
-        required=False,
-        label="É usuário administrado "
-    )
-
-    bill = forms.FloatField(
-        label="Multa",
-        initial=0.0,
-        widget=forms.TextInput(
-            attrs={'readonly': 'readonly'}
-        )
-    )
+    is_superuser = forms.BooleanField()
 
     class Meta:
         model = User
@@ -27,15 +16,23 @@ class CustomUserCreationForm(UserCreationForm):
             "last_name",
             "password1",
             "password2",
-            "bill",
             "is_superuser"
         ]
+    
+    def __init__(self, *args, **kwargs):
+        super(CustomUserCreationForm, self).__init__(*args, **kwargs)
+
+        self.fields['username'].widget.attrs['placeholder'] = 'Informe o nome do usuário'
+        self.fields['first_name'].widget.attrs['placeholder'] = 'Informe o primeiro nome'
+        self.fields['last_name'].widget.attrs['placeholder'] = 'Informe o último nome'
+        self.fields['password1'].widget.attrs['placeholder'] = 'Informe a senha'
+        self.fields['password2'].widget.attrs['placeholder'] = 'Informe a senha outra vez'
 
 
 class BookCreationForm(forms.ModelForm):
     name = forms.CharField(max_length=200, required=True)
-    author = forms.CharField(max_length=200, required=True)
-    synopsis = forms.CharField(max_length=200, required=False)
+    autor = forms.CharField(max_length=200, required=True)
+    sinopse = forms.CharField(max_length=200, required=False)
     data_lancamento = forms.DateField(
         required=True,
         input_formats=['%Y-%m-%d', '%m/%d/%Y', '%m/%d/%y'],
@@ -47,7 +44,7 @@ class BookCreationForm(forms.ModelForm):
         model = Books
         fields = [
             'name',
-            'author',
-            'synopsis',
+            'autor',
+            'sinopse',
             'data_lancamento',
         ]

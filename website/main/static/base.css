@@ -21,14 +21,23 @@ body a:hover {
 }
 
 body button:hover {
-    color: black;
     transition: ease 200ms;
-    background-color: rgb(140, 241, 228);
+    background-color: rgb(14, 94, 78);
+}
+
+#closeBtn:hover {
+    transition: ease 200ms;
+    background-color: white;
 }
 
 #labels {
     margin-right: 3%;
 }
+
+form .specific {
+    width: auto;
+}
+
 
 #pagination {
     margin-left: 4%;
@@ -47,7 +56,7 @@ button {
 }
 
 input {
-    margin-right: 3%;
+    width: 100%;
     border-radius: 9px;
     padding: 5px;
 }
@@ -66,17 +75,6 @@ input {
 a {
     color: black;
     text-decoration: none;
-}
-
-.alert {
-    top: 0;
-    background-color: #18a689;
-    width: 50%;
-    border-color: white;
-    color: black;
-    margin-right: 25%;
-    margin-left: 30%;
-    margin-top: 1%;
 }
 
 #sidebar i {
@@ -126,6 +124,15 @@ i:hover {
     scale: 1.1;
 }
 
+.alert {
+    top: 0;
+    background-color: white;
+    width: 60%;
+    color: black;
+    margin-left: 20%;
+    margin-top: 1%;
+}
+
 .messages li {
     margin-left:5%;
     display: inline-block;
@@ -135,9 +142,13 @@ i:hover {
 }
 
 .messages li.success {
-    color: white;
+    font-weight: bold;
+    color: #18a689;
 }
 
 .messages li.error, .messages li.warning {
-    color: black;
+    font-weight: bold;
+    color: red;
+    background-color: white;
 }
+
