@@ -26,17 +26,31 @@ body button:hover {
     background-color: rgb(140, 241, 228);
 }
 
+#labels {
+    margin-right: 3%;
+}
+
+#pagination {
+    margin-left: 4%;
+}
+
+#titles {
+    font-size: 2em;
+}
+
 button {
+    border-color: #18a689;
     background-color: #18a689;
     border-radius: 9px;
     width: 100%;
+    color: white;
 }
 
 input {
+    margin-right: 3%;
     border-radius: 9px;
     padding: 5px;
 }
-
 
 #userName {
     position: absolute;
@@ -47,7 +61,6 @@ input {
     margin-left: 5%;
     margin-top: 20px;
     font-size: large;
-    color: black;
 }
 
 a {
@@ -67,7 +80,7 @@ a {
 }
 
 #sidebar i {
-    color: black;
+    color: white;
 }
 
 
@@ -79,9 +92,10 @@ a {
 
 
 #sidebar {
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
+    color: white;
     width: 12rem;
     height: 100%;
     z-index: 1;
@@ -93,7 +107,20 @@ a {
 }
 
 #sidebar a:hover {
-    color: white;
+    color: rgb(14, 94, 78);
+    font-weight: bold;
+    scale: 1.1;
+}
+
+#cancel:hover {
+    color: red;
+    font-weight: bold;
+    scale: 1.1;
+}
+
+
+i:hover {
+    color: #18a689;
     font-weight: bold;
     transition: ease 200ms;
     scale: 1.1;

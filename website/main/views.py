@@ -1,5 +1,3 @@
-from django.db import connection
-from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -7,7 +5,9 @@ from django.contrib import messages
 from datetime import datetime, timedelta
 from .models import *
 from .filters import BookFilter
-
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+from urllib.parse import urlencode
 
 from .forms import (
     CustomUserCreationForm,
@@ -88,13 +88,17 @@ def logout_user(request):
 @login_required
 def reserve_book(request, book_id):
     book = get_object_or_404(Books, id=book_id)
+    name_param = request.POST.get('name', '')
+    status_param = request.POST.get('status', '')
+    url_params = urlencode({'name': name_param, 'status': status_param})
+
     if request.method == 'POST':
         user = request.user  
         reservation_date = request.POST.get('user_date')
         existing_reservation = book.reservations.filter(reservation_date=reservation_date).first()
         if existing_reservation:
             messages.success(request, "Já existe uma reserva nessa data!")
-            return redirect("show_books")
+            return HttpResponseRedirect(f'{reverse("show_books_filter")}?{url_params}')
 
         reservation_date = datetime.strptime(reservation_date, "%Y-%m-%d")
         reservation_date = reservation_date.date()
@@ -107,7 +111,7 @@ def reserve_book(request, book_id):
         else:
             messages.error(request, "Não é possível reservar livros para datas inferiores a data atual!")
         
-    return redirect("show_books")
+    return HttpResponseRedirect(f'{reverse("show_books_filter")}?{url_params}')
 
 
 @login_required
@@ -156,44 +160,43 @@ def cancel_reservation(request, reservation_id):
     return redirect("index")
 
 
-@login_required
-def show_books(request):
-    books = Books.objects.all()
-    books_count = Books.objects.count()
-    paginator = Paginator(books, 6)
-    page = request.GET.get('page')
-
-    try:
-        books = paginator.page(page)
-    except PageNotAnInteger:
-        books = paginator.page(1)
-    except EmptyPage:
-        books = paginator.page(paginator.num_pages)
-        
-    context = {'books_count': books_count, 'books': books}
-
-    return render(request, 'show_books.html', context)
-
 
 @login_required
 def show_books_filter(request):
-    books = Books.objects.all()
-    books_count = Books.objects.count()
-    paginator = Paginator(books, 6)
+    books = Books.objects.all() 
+    books_filter = BookFilter(request.GET, queryset=books)
+    paginator = Paginator(books_filter.qs, 6)
     page = request.GET.get('page')
 
-    books_filter = BookFilter(request.GET, queryset=books)
-
     try:
-        books = paginator.page(page)
+        books_data = paginator.page(page)
     except PageNotAnInteger:
-        books = paginator.page(1)
+        books_data = paginator.page(1)
     except EmptyPage:
-        books = paginator.page(paginator.num_pages)
-        
-    context = {'books_count': books_count, 'books': books, 'filter': books_filter}
+        books_data = paginator.page(paginator.num_pages)
 
-    return render(request, 'show_books.html', context)
+    return render(request, 'show_books_filters.html', {'books_data': books_data, 'form': books_filter})
+
+
+@login_required
+def update_book_status(request, book_id):
+    book = get_object_or_404(Books, id=book_id)
+    name_param = request.POST.get('name', '')
+    status_param = request.POST.get('status', '')
+    url_params = urlencode({'name': name_param, 'status': status_param})
+
+    if request.method == 'POST' and request.user.is_superuser:
+        new_status = request.POST.get('new_status')
+        print(f'new_status{new_status}')
+        if new_status in ['Disponível', 'Reservado', 'Retirado']:
+            book.status = new_status
+            book.save()
+        else:
+            messages.error(request, 'Selecione uma opção válida.')
+    else:
+        messages.error(request, 'Apenas usuários administradores podem alterar status.')
+
+    return HttpResponseRedirect(f'{reverse("show_books_filter")}?{url_params}')
 
 
 @login_required
@@ -224,7 +227,7 @@ def del_books(request, book_id):
     author = book.author
     book.delete()
     messages.success(request, f'Livro \'{name}\' de \'{author}\' excluído com sucesso.')
-    return redirect('show_books')
+    return redirect('show_books_filter')
 
 
 def index(request):

@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<section class="wrapper" style="margin-left: 20%; margin-right: 30%; margin-top: 2%;">
+<div class="table-wrapper">
+    <h1 id="titles">Livros</h1>
+    <form method="GET" action="{% url 'show_books_filter' %}" style="display: flex; align-items: center; flex-direction: row;">   
+        {% for field in form.form %}
+            {% if field.name == 'name' %}
+                <label id="labels" for="id_name">Livro</label>
+                <input type="{{ field.field.widget.input_type }}" name="name" value="" placeholder="">
+            {% elif field.name == 'status' %}
+                <label id="labels" for="id_status">Status:</label>
+                <input type="{{ field.field.widget.input_type }}" name="status" value="" placeholder="">
+            {% endif %} 
+        {% endfor %}
+        <button type="submit" style="margin-left: 5%">Buscar</button>
+        <a href="{% url 'show_books_filter' %}" style="margin-left: 5%">
+            <button type="submit" style="margin-left: 5%">Limpar</button>
+        </a>
+    </form>
+    <br>
+    <table class="table" style="padding: 10px; border: 3px solid #18a689; border-radius: 5px; border-style: solid;">
+        <thead class="table-head" style="color: white; background-color: #18a689; border: 3px solid #18a689;">
+            <tr style="border: 1px solid black;">
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Autor</th> 
+                <th>Sinopse</th>
+                <th>Reservas</th>
+                <th>Data de Lançamento</th>
+                <th>Status</th>
+                <th>Alterar Status</th>
+                <th>Reservar</th>
+                <th>Excuir</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for book in books_data %}
+            <tr style="padding: 10px;">
+                <td>{{ book.id }}</td>
+                <td>{{ book.name }}</td>
+                <td>{{ book.author }}</td>
+                <td>{{ book.synopsis }}</td>
+                <td>{{ book.reservas }}</td>
+                <td>{{ book.data_lancamento }}</td>
+                <td>{{ book.status }}</td>
+                <td>
+                    <form method="POST" action="{% url 'update_book_status' book.id %}">
+                        {% csrf_token %}   
+                        <button type="submit" style="margin-top: 5%;; margin-bottom: 3%;">Alterar</button>
+                        <input type="hidden" name="name" value="{{ request.GET.name }}">
+                        <input type="hidden" name="status" value="{{ request.GET.status }}">
+                        <select name="new_status">
+                            <option value="opções" disabled>opções</option>
+                            <option value="Disponível">Disponível</option>
+                            <option value="Reservado">Reservado</option>
+                            <option value="Retirado">Retirado</option>
+                        </select>
+                        <br>
+                        <br>
+                    </form>
+                </td>
+                <td>
+                    <form method="POST" action="{% url 'reserve_book' book.id %}">
+                        {% csrf_token %}
+                        <button style="margin-top: 5%; margin-bottom: 3%;" type="submit" > Reservar </button>
+                        <input type="hidden" name="name" value="{{ request.GET.name }}">
+                        <input type="hidden" name="status" value="{{ request.GET.status }}">
+                        <input type="date" style="width: 100%;" name="user_date">
+                    </form>
+                </td>
+                <td>
+                    <a style="margin-left: 20px; text-decoration: none;" href="{% url 'del_books' book.id %}" onclick="return confirm('Are you sure you want to delete this book?')">
+                        <i class="fa fa-trash-o" aria-hidden="true" style="font-size: 30px;"></i>
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <div>
+        <span class="step-links">
+            {% if books_data.number %}
+                <span class="current" style="padding-right: 10px;">Página {{ books_data.number }} de {{ books_data.paginator.num_pages }}.</span>
+            {% endif %}
+            {% if books_data.has_previous %}
+                <a id="pagination" href="?page=1">&laquo; Primeiro</a>
+                <a id="pagination" href="?page={{ books_data.previous_page_number }}">Anterior</a>
+            {% endif %}
+            {% if books_data.has_next %}
+                <a id="pagination" href="?page={{ books_data.next_page_number }}">Próximo</a>
+                <a id="pagination" href="?page={{ books_data.paginator.num_pages }}">Último &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+</div>
+</section>
+{% endblock %}
+
+
+
