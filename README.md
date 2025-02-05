@@ -1,19 +1,19 @@
-# SISTEMA DE GERENCIAMENTO DE LIVROS E USUÁRIOS.
+# Book and User Management System
 
-    # Visão Geral:
-        O Sistema de Gerenciamento de Livros é uma aplicação baseada em Django projetada 
-        para gerenciar o inventário e as reservas de livros em uma biblioteca online.
-        É possível criar, excluir e atualizar entradas de livros. E também é possível
-        criar, excluir e atualizar perfis de usuários.
+## Overview:
 
-    # Permissões:
-        Administradores: Podem criar livros e alterar o status de um livro.
-        Usuários: Podem reservar e listar livros.
+- The Book and User Management System is a Django-based application designed to manage the inventory and reservations of books in an online library. It allows creating, deleting, and updating book entries, as well as creating, deleting, and updating user profiles.
 
-    # Implantação:
-        Crie um ambiente virtual para instalar as dependências. 
-        Instale o Django e as dependências necessárias com comando 'pip install -r requirements.txt'.
-        Configure as configurações do banco de dados em settings.py.
-        Execute as migrações: python manage.py migrate.
-        Crie um superusuário para acesso administrativo: python manage.py createsuperuser.
-        Inicie o servidor de desenvolvimento: python manage.py runserver.
+## Permissions:
+
+- Administrators: Can create books and change the status of a book.
+- Users: Can reserve and list books.
+
+## Deployment:
+
+- Create a Virtual Environment: Set up a virtual environment to install dependencies.
+- Install Dependencies: Run the command pip install -r requirements.txt to install Django and other necessary packages.
+- Configure Database Settings: Update the database configurations in settings.py.
+- Run Migrations: Execute python manage.py migrate to apply database migrations.
+- Create a Superuser: Create an administrative superuser with python manage.py createsuperuser.
+- Start the Development Server: Launch the development server with python manage.py runserver.
